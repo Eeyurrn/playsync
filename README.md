@@ -1,36 +1,8 @@
 # playsync
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
+Created a small program to feed multiple consumers running in `go` blocks to perform an action. There are mechanisms to ensure that the consumers dont get the same payload to process.
 
 ## Usage
 
-FIXME: explanation
+Run in the REPL. invoke `(start-everything)`
 
-    $ java -jar playsync-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
