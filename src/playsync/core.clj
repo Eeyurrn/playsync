@@ -36,11 +36,11 @@
                    (drop accumulate-limit acc))))))))
 
 (add-watch active-distributors :update-count
-           (fn [key ident old new]
+           (fn [_ _ old new]
              (send-off log-agent
                        (fn [_] (print-to-log "old:" old "new:" new)))))
 
-(defn distributor2 [threadnum channel]
+(defn distributor [threadnum channel]
   (go
     (swap! active-distributors inc)
     (print-to-log "Thread number" threadnum)
