@@ -24,14 +24,16 @@
               (println st)) (clojure.string/join " " s)))
 
 (defn transfer-from-accumulator! []
-  (dosync
-    (when (<= accumulate-limit (count @accumulator))
-      (alter (ref to-distributors)
-             (fn [ch]
-               (>!! ch (into [] (take accumulate-limit @accumulator)))))
-      (alter accumulator
-             (fn [acc]
-               (drop accumulate-limit acc))))))
+  (future
+    (while consume?
+      (dosync
+        (when (<= accumulate-limit (count @accumulator))
+          (alter (ref to-distributors)
+                 (fn [ch]
+                   (>!! ch (into [] (take accumulate-limit @accumulator)))))
+          (alter accumulator
+                 (fn [acc]
+                   (drop accumulate-limit acc))))))))
 
 (add-watch active-distributors :update-count
            (fn [key ident old new]
