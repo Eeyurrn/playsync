@@ -52,11 +52,16 @@
             (print-to-log "Processing Thread" threadnum msg)
             (recur ch)))))))
 
-(defn fire []
-  (do (while true
+(defn fire!
+  "transfers random stuff to the accumulator"
+  []
+  (do
+    (reset! consume? true)
+    (future
+      (while consume?
         (Thread/sleep 1000)
         (dosync
-          (alter accumulator into [(get phonetic (rand-int (count phonetic)))])))))
+          (alter accumulator into [(get phonetic (rand-int (count phonetic)))]))))))
 
 (defn spawn-distributors [num-threads]
   (dotimes [n num-threads]
