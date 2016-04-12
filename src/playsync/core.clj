@@ -63,7 +63,9 @@
         (dosync
           (alter accumulator into [(get phonetic (rand-int (count phonetic)))]))))))
 
-(defn spawn-distributors [num-threads]
+(defn stop-consume! []
+  (reset! consume? false))
+
   (dotimes [n num-threads]
     (distributor2 n to-distributors)))
 
