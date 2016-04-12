@@ -18,12 +18,16 @@
 
 (def accumulator (ref []))
 
-(defn print-to-log [& s]
+(defn print-to-log
+  "Prints to std out without munging the text"
+  [& s]
   (send-off log-agent
             (fn [_ st]
               (println st)) (clojure.string/join " " s)))
 
-(defn transfer-from-accumulator! []
+(defn transfer-from-accumulator!
+  "Transfers from the accumulator into the to-distributors channel, uses refs to ensure it happens in a coordinated fashion"
+  []
   (future
     (while consume?
       (dosync
@@ -40,7 +44,9 @@
              (send-off log-agent
                        (fn [_] (print-to-log "old:" old "new:" new)))))
 
-(defn distributor [threadnum channel]
+(defn distributor
+  "Distributor worker. Runs in a go block constantly looping until the channel it consumes is closed"
+  [threadnum channel]
   (go
     (swap! active-distributors inc)
     (print-to-log "Thread number" threadnum)
@@ -66,7 +72,9 @@
 (defn stop-consume! []
   (reset! consume? false))
 
-(defn spawn-distributors! [num-threads]
+(defn spawn-distributors!
+  "spawns a number of distributor threads"
+  [num-threads]
   (dotimes [n num-threads]
     (distributor n to-distributors)))
 
