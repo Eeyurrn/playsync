@@ -66,8 +66,10 @@
 (defn stop-consume! []
   (reset! consume? false))
 
+(defn spawn-distributors! [num-threads]
   (dotimes [n num-threads]
-    (distributor2 n to-distributors)))
+    (distributor n to-distributors)))
+
 
 (defn -main
   "I don't do a whole lot ... yet."
