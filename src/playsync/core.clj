@@ -70,6 +70,12 @@
   (dotimes [n num-threads]
     (distributor n to-distributors)))
 
+(defn start-everything
+  ([] (start-everything 2))
+  ([n]
+   (spawn-distributors! n)
+   (transfer-from-accumulator!)
+   (fire!)))
 
 (defn -main
   "I don't do a whole lot ... yet."
