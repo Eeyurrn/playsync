@@ -38,19 +38,6 @@
              (send-off log-agent
                        (fn [_] (print-to-log "old:" old "new:" new)))))
 
-(defn distributor [channel threadnum]
-  (let [t threadnum
-        c channel]
-    (go
-      (swap! active-distributors inc)
-      (print-to-log "Thread number: " t)
-      (while @consume?
-        (Thread/sleep (rand-int 1000))
-        (let [msg (<! c)]
-          (print-to-log "Processing Thread" t msg)
-          msg))
-      (swap! active-distributors dec))))
-
 (defn distributor2 [threadnum channel]
   (go
     (swap! active-distributors inc)
